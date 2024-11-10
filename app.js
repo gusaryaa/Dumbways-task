@@ -70,10 +70,10 @@ async function home(req, res) {
     const query = `SELECT tb_projects.*, tb_users.name AS author FROM tb_projects LEFT JOIN tb_users ON tb_projects.author_id = tb_users.id`;
     let projects = await sequelize.query(query, { type: QueryTypes.SELECT });
 
-    // projects = projects.map((project) => ({
-    //     ...project,
-    //     technologies: project.technologies,
-    // }));
+    projects = projects.map((project) => ({
+        ...project,
+        technologies: project.technologies,
+    }));
 
 
 
@@ -165,15 +165,15 @@ async function projectPost(req, res) {
     }
 
     const { title, desc, technologies, start_date, end_date } = req.body;
-    // const techArray = Array.isArray(technologies)
-    //     ? technologies
-    //     : typeof technologies === "string"
-    //     ? technologies.split(',').map(tech => tech.trim())
-    //     : [];
+    const techArray = Array.isArray(technologies)
+        ? technologies
+        : typeof technologies === "string"
+        ? technologies.split(',').map(tech => tech.trim())
+        : [];
     
     const { id } = req.session.user; 
     const imagePath = req.file.path;
-    // const formattedTechnologies = `{${techArray.join(',')}}`;
+    const formattedTechnologies = `{${techArray.join(',')}}`;
 
     const query = `
         INSERT INTO tb_projects (name, description, image, technologies, start_date, end_date, author_id) 
@@ -232,12 +232,12 @@ async function updateProjectPost(req, res) {
     const { title, desc, technologies, start_date, end_date } = req.body;
     
     // Format technologies ke dalam format array PostgreSQL
-    // const techArray = Array.isArray(technologies)
-    //     ? technologies
-    //     : typeof technologies === "string"
-    //     ? technologies.split(',').map(tech => tech.trim())
-    //     : [];
-    // const formattedTechnologies = `{${techArray.join(',')}}`;
+    const techArray = Array.isArray(technologies)
+        ? technologies
+        : typeof technologies === "string"
+        ? technologies.split(',').map(tech => tech.trim())
+        : [];
+    const formattedTechnologies = `{${techArray.join(',')}}`;
 
   
     const imagePath = req.file ? req.file.path : null;
