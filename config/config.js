@@ -11,7 +11,7 @@ module.exports = {
     dialectModule: pg,
     dialectOptions: {
       ssl: {
-        require: true,
+        require: false,
         rejectUnauthorized: false,
       },
     },
