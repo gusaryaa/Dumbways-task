@@ -17,7 +17,7 @@ const sequelize = new Sequelize(config[environment]);
 
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "./src/views"));
-app.set('trust proxy', 1);
+
 
 app.use("/assets", express.static(path.join(__dirname, "./src/assets")));
 app.use("/uploads", express.static(path.join(__dirname, "./uploads")));
@@ -44,20 +44,6 @@ app.use((req, res, next) => {
 });
   
 
-
-if (environment === "production") {
-    sequelize.authenticate()
-      .then(() => {
-        console.log("Database connected!");
-        return sequelize.sync(); 
-      })
-      .then(() => {
-        console.log("Database synchronized!");
-      })
-      .catch(err => {
-        console.error("Unable to connect to the database:", err);
-      });
-  }
 // Rute yang digunakan
 app.get("/", home);
 app.get("/testimonial", testimonial);
@@ -84,10 +70,10 @@ async function home(req, res) {
     const query = `SELECT tb_projects.*, tb_users.name AS author FROM tb_projects LEFT JOIN tb_users ON tb_projects.author_id = tb_users.id`;
     let projects = await sequelize.query(query, { type: QueryTypes.SELECT });
 
-    projects = projects.map((project) => ({
-        ...project,
-        technologies: project.technologies,
-    }));
+    // projects = projects.map((project) => ({
+    //     ...project,
+    //     technologies: project.technologies,
+    // }));
 
 
 
@@ -179,15 +165,15 @@ async function projectPost(req, res) {
     }
 
     const { title, desc, technologies, start_date, end_date } = req.body;
-    const techArray = Array.isArray(technologies)
-        ? technologies
-        : typeof technologies === "string"
-        ? technologies.split(',').map(tech => tech.trim())
-        : [];
+    // const techArray = Array.isArray(technologies)
+    //     ? technologies
+    //     : typeof technologies === "string"
+    //     ? technologies.split(',').map(tech => tech.trim())
+    //     : [];
     
     const { id } = req.session.user; 
     const imagePath = req.file.path;
-    const formattedTechnologies = `{${techArray.join(',')}}`;
+    // const formattedTechnologies = `{${techArray.join(',')}}`;
 
     const query = `
         INSERT INTO tb_projects (name, description, image, technologies, start_date, end_date, author_id) 
@@ -246,12 +232,12 @@ async function updateProjectPost(req, res) {
     const { title, desc, technologies, start_date, end_date } = req.body;
     
     // Format technologies ke dalam format array PostgreSQL
-    const techArray = Array.isArray(technologies)
-        ? technologies
-        : typeof technologies === "string"
-        ? technologies.split(',').map(tech => tech.trim())
-        : [];
-    const formattedTechnologies = `{${techArray.join(',')}}`;
+    // const techArray = Array.isArray(technologies)
+    //     ? technologies
+    //     : typeof technologies === "string"
+    //     ? technologies.split(',').map(tech => tech.trim())
+    //     : [];
+    // const formattedTechnologies = `{${techArray.join(',')}}`;
 
   
     const imagePath = req.file ? req.file.path : null;
