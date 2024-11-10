@@ -17,6 +17,7 @@ const sequelize = new Sequelize(config[environment]);
 
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "./src/views"));
+app.set('trust proxy', 1);
 
 app.use("/assets", express.static(path.join(__dirname, "./src/assets")));
 app.use("/uploads", express.static(path.join(__dirname, "./uploads")));
@@ -34,6 +35,7 @@ app.use(
     })
 );
 app.use(flash());
+
 // Middleware untuk menampilkan data user di semua view
 app.use((req, res, next) => {
     res.locals.user = req.session.user || null;
