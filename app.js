@@ -33,7 +33,7 @@ app.use(
       },
     })
 );
-
+app.use(flash());
 // Middleware untuk menampilkan data user di semua view
 app.use((req, res, next) => {
     res.locals.user = req.session.user || null;
@@ -41,7 +41,7 @@ app.use((req, res, next) => {
     next();
 });
   
-app.use(flash());
+
 
 if (environment === "production") {
     sequelize.authenticate()
