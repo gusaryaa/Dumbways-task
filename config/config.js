@@ -24,10 +24,7 @@ module.exports = {
     dialect: "postgres",
     dialectModule: pg,
     dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
+      ssl: process.env.POSTGRES_HOST !== 'localhost' ? { require: true, rejectUnauthorized: false } : false,
     },
   },
 };
